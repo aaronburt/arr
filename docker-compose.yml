@@ -12,6 +12,7 @@ services:
       - "8112:8112" # Deluge Web
       - "9696:9696" # Prowlarr Web
       - "8112:8112" # Deluge Web
+      - "5055:5055" # Overseerr
     volumes:
       - ${CONFIG_PATH}/gluetun:/gluetun
     environment:
@@ -22,7 +23,7 @@ services:
       - OPENVPN_USER=${OPENVPN_USERNAME}
       - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
       - TZ=${TIMEZONE}
-      - DNS_ADDRESS=1.1.1.1
+      - DNS_ADDRESS=${PLAINTEXT_DNS}
       - SERVER_REGIONS=${OPENVPN_REGION}
     restart: unless-stopped
 
@@ -86,4 +87,18 @@ services:
       - PUID=${USER_ID}
       - PGID=${GROUP_ID}
       - TZ=${TIMEZONE}
+    restart: unless-stopped
+
+  overseerr:
+    depends_on:
+      - gluetun
+    network_mode: "service:gluetun"
+    container_name: overseerr
+    image: lscr.io/linuxserver/overseerr:latest
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/overseerr:/config
     restart: unless-stopped

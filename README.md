@@ -2,8 +2,8 @@
 # Setup
 
 
-* Create an .env file with the contents of .env.sample
-* Next, amend the freshly created .env with variables appropriate for the environment
+* Create an `.env` file with the contents of `.env.sample`
+* Next, amend the freshly created `.env` with variables appropriate for the environment
 * Finally, run `docker compose up -d` 
 
 
