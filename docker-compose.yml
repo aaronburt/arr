@@ -1,0 +1,89 @@
+services:
+  gluetun:
+    container_name: gluetun
+    image: qmcgaw/gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "7878:7878" # Radarr Web
+      - "8989:8989" # Sonarr Web
+      - "8112:8112" # Deluge Web
+      - "9696:9696" # Prowlarr Web
+      - "8112:8112" # Deluge Web
+    volumes:
+      - ${CONFIG_PATH}/gluetun:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=${OPENVPN_PROVIDER}
+      - VPN_PORT_FORWARDING='on'
+      - VPN_PORT_FORWARDING_STATUS_FILE="/gluetun/forwarded_port"
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=${OPENVPN_USERNAME}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - TZ=${TIMEZONE}
+      - DNS_ADDRESS=1.1.1.1
+      - SERVER_REGIONS=${OPENVPN_REGION}
+    restart: unless-stopped
+
+  radarr:
+    depends_on:
+      - gluetun
+    network_mode: "service:gluetun"
+    container_name: radarr
+    image: linuxserver/radarr:latest
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/radarr:/config
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${MOVIE_PATH}:/movies
+    restart: unless-stopped
+
+  sonarr:
+    depends_on:
+      - gluetun
+    network_mode: "service:gluetun"
+    container_name: sonarr
+    image: linuxserver/sonarr:latest
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TZ=${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/sonarr:/config
+      - ${DOWNLOAD_PATH}:/downloads
+      - ${TV_PATH}:/tv
+    restart: unless-stopped
+
+  prowlarr:
+    depends_on:
+      - gluetun
+    network_mode: "service:gluetun"
+    container_name: prowlarr
+    image: ghcr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TIMEZONE=${TIMEZONE}
+    volumes:
+      - ${CONFIG_PATH}/prowlarr:/config
+    restart: unless-stopped
+
+  deluge:
+    depends_on:
+      - gluetun
+    network_mode: "service:gluetun"
+    container_name: deluge
+    image: lscr.io/linuxserver/deluge:latest
+    volumes:
+      - ${CONFIG_PATH}/deluge:/config
+      - ${CONFIG_PATH}/gluetun:/pia:ro
+      - ${DOWNLOAD_PATH}:/downloads
+    environment:
+      - PUID=${USER_ID}
+      - PGID=${GROUP_ID}
+      - TZ=${TIMEZONE}
+    restart: unless-stopped
