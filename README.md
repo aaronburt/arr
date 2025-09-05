@@ -1,5 +1,5 @@
 
-# Setup
+## Setup
 
 
 * Create an `.env` file with the contents of `.env.sample`
@@ -7,10 +7,27 @@
 * Finally, run `docker compose up -d` 
 
 
-# The Idea
+## Variables
+
+| Variable | Value | Format Type |
+|---|---|---|
+| OPENVPN_PROVIDER | private internet access | String |
+| OPENVPN_USERNAME | USERNAME | String (Placeholder) |
+| OPENVPN_PASSWORD | PASSWORD | String (Placeholder) |
+| OPENVPN_REGION | REGION | String (Placeholder) |
+| PLAINTEXT_DNS | 1.1.1.1 | IP Address |
+| USER_ID | 0 | Integer |
+| GROUP_ID | 0 | Integer |
+| TIMEZONE | Europe/London | Timezone String |
+| DOWNLOAD_PATH | ./downloads | File Path |
+| CONFIG_PATH | ./config | File Path |
+| MOVIE_PATH | ./movies | File Path |
+| TV_PATH | ./tv | File Path |
+
+## The Idea
 
 It will inject the variables into the docker containers on runtime, this means you don't need to touch the compose file for most reasons 
 
-# Disclaimer
+## Disclaimer
 
 This configuration is provided for educational and testing purposes only. It is not intended for production use or for any illegal activities. The user assumes all responsibility for any actions taken using this file. The author is not liable for any misuse, damage, or legal consequences that may arise from its use.
