@@ -4,8 +4,43 @@
 
 * Create an `.env` file with the contents of `.env.sample`
 * Next, amend the freshly created `.env` with variables appropriate for the environment
-* Finally, run `docker compose up -d` 
+* Following, run `docker compose up -d` 
+* Once its booted succesfully, following the steps for each app
 
+#### Deluge
+
+* Login into Deluge (`::8112`) with password of `deluge`
+* Change the password, make sure its strong!
+* Preferences then Plugins and enable `Label`'s
+
+### Radarr
+
+* Goto Radarr (`::7878`)
+* Use an authentication method and set a good username/password
+* Goto `Settings` then `Download Clients` and add Deluge
+* Goto `Media Management` and enable `Rename Movies` and add a root folder of `/movies`
+* Finally goto `Settings` general `API Key` and copy it down, you will need it later for Prowlarr
+
+### Sonarr
+
+* Goto Radarr (`::8989`)
+* Use an authentication method and set a good username/password
+* Goto `Settings` then `Download Clients` and add Deluge
+* Goto `Media Management` and enable `Rename Episodes` and add a root folder of `/tv`
+* Finally goto `Settings` general `API Key` and copy it down, you will need it later for 
+
+
+#### Prowlarr
+
+* Goto prowlarr (`::9696`)
+* Use an authentication method and set a good username/password
+* Goto `Settings` then `Download Clients` and add `Deluge`
+* Goto `Settings` then `Apps` and add an Radarr, use the API Key (localhost should work, don't change the server settings) and the same for `Sonarr` with its key.
+* Goto `Indexers` and add Indexers and `Sync App Indexers`
+
+#### Overseerr
+
+* Follow the install setup using the api keys and localhosts as before.
 
 ## Variables
 
